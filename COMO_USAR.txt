@@ -1,0 +1,146 @@
+================================================================
+   COMO USAR O GERADOR DE PETIÇÕES — Tema 20/TST PREVI
+================================================================
+
+Este guia explica, passo a passo, como rodar o sistema no seu
+computador. Não precisa saber programar!
+
+
+────────────────────────────────────────────────────────────────
+PASSO 1 — INSTALAR O PYTHON
+────────────────────────────────────────────────────────────────
+
+O sistema roda em Python (uma linguagem de programação).
+Você precisa instalar no seu computador, caso ainda não tenha.
+
+  1. Acesse: https://www.python.org/downloads/
+  2. Clique no botão amarelo "Download Python 3.x.x"
+  3. Abra o arquivo baixado para iniciar a instalação
+  4. IMPORTANTE: na primeira tela do instalador, marque a opção
+     "Add Python to PATH" (tem um quadradinho para marcar)
+  5. Clique em "Install Now" e aguarde terminar
+
+Para conferir se deu certo:
+  - Abra o Prompt de Comando (no Windows, procure por "cmd"
+    no menu Iniciar)
+  - Digite:  python --version
+  - Deve aparecer algo como "Python 3.12.0"
+    (o número pode variar, desde que seja 3.8 ou superior)
+
+
+────────────────────────────────────────────────────────────────
+PASSO 2 — BAIXAR O SISTEMA
+────────────────────────────────────────────────────────────────
+
+Copie a pasta do sistema para um local fácil de encontrar
+no seu computador, por exemplo:
+
+  C:\Users\SeuNome\Desktop\gerador-tema-20
+
+Dentro dessa pasta você deve ter estes arquivos:
+  - gerar_peticoes.py     (o programa principal)
+  - requirements.txt      (lista do que o programa precisa)
+  - criar_dados_teste.py  (cria dados de exemplo, opcional)
+
+
+────────────────────────────────────────────────────────────────
+PASSO 3 — INSTALAR AS DEPENDÊNCIAS (só precisa fazer 1 vez)
+────────────────────────────────────────────────────────────────
+
+O programa precisa de dois componentes extras. Para instalá-los:
+
+  1. Abra o Prompt de Comando (cmd)
+  2. Navegue até a pasta do sistema digitando:
+       cd C:\Users\SeuNome\Desktop\gerador-tema-20
+     (ajuste o caminho conforme onde você salvou)
+  3. Digite o comando:
+       pip install -r requirements.txt
+  4. Aguarde até aparecer "Successfully installed..."
+
+Pronto! Isso só precisa ser feito uma vez.
+
+
+────────────────────────────────────────────────────────────────
+PASSO 4 — PREPARAR OS ARQUIVOS DE ENTRADA
+────────────────────────────────────────────────────────────────
+
+Dentro da pasta do sistema, crie uma pasta chamada "entrada"
+(se ela ainda não existir). Coloque nela 5 arquivos:
+
+  entrada/
+    ├── dados_clientes.xlsx          (planilha com os dados)
+    ├── modelo_masculino_1RT.docx    (modelo masculino, 1 RT)
+    ├── modelo_masculino_2RT.docx    (modelo masculino, 2 RTs)
+    ├── modelo_feminino_1RT.docx     (modelo feminino, 1 RT)
+    └── modelo_feminino_2RT.docx     (modelo feminino, 2 RTs)
+
+Os nomes precisam ser EXATAMENTE esses.
+Os modelos Word devem conter as variáveis entre chaves, como
+{Nome}, {DataDesligamento}, etc.
+
+
+────────────────────────────────────────────────────────────────
+PASSO 5 — RODAR O SISTEMA
+────────────────────────────────────────────────────────────────
+
+  1. Abra o Prompt de Comando (cmd)
+  2. Navegue até a pasta:
+       cd C:\Users\SeuNome\Desktop\gerador-tema-20
+  3. Digite:
+       python gerar_peticoes.py
+  4. O sistema vai mostrar na tela o que está fazendo,
+     cliente por cliente.
+
+Quando terminar, vai aparecer um resumo dizendo quantos
+foram gerados com sucesso, quantos deram erro, etc.
+
+
+────────────────────────────────────────────────────────────────
+PASSO 6 — PEGAR OS RESULTADOS
+────────────────────────────────────────────────────────────────
+
+O sistema cria automaticamente uma pasta "saida" com:
+
+  saida/
+    ├── Peticao - NOME DO CLIENTE 1.docx
+    ├── Peticao - NOME DO CLIENTE 2.docx
+    ├── Peticao - NOME DO CLIENTE 3.docx
+    ├── ...
+    ├── relatorio_conferencia.xlsx   (resumo de tudo)
+    └── log_execucao.txt             (registro detalhado)
+
+Abra o relatório de conferência para ver o status de cada
+petição (OK, ERRO ou AVISO), com cores:
+  - Verde  = OK, gerado com sucesso
+  - Vermelho = ERRO, não foi possível gerar
+  - Amarelo = AVISO, gerado mas com alguma observação
+
+
+────────────────────────────────────────────────────────────────
+DICAS E PROBLEMAS COMUNS
+────────────────────────────────────────────────────────────────
+
+"python não é reconhecido como comando"
+  -> O Python não foi adicionado ao PATH na instalação.
+     Reinstale marcando "Add Python to PATH".
+
+"Nenhum arquivo encontrado na pasta entrada"
+  -> Confira se a pasta "entrada" está dentro da pasta do
+     sistema e se os 5 arquivos estão lá com os nomes certos.
+
+"Coluna obrigatória ausente"
+  -> A planilha precisa ter os cabeçalhos exatos na linha 1.
+     Confira se não há espaço extra ou erro de digitação.
+
+"Quero testar antes com dados de exemplo"
+  -> Rode primeiro:  python criar_dados_teste.py
+     Isso cria uma planilha e modelos de exemplo na pasta
+     "entrada". Depois rode:  python gerar_peticoes.py
+
+Para rodar novamente com novos dados:
+  -> Basta atualizar a planilha e os modelos na pasta "entrada"
+     e rodar o comando do Passo 5 de novo. Os arquivos antigos
+     na pasta "saida" serão substituídos.
+
+
+================================================================
