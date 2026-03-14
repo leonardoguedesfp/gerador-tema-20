@@ -200,18 +200,25 @@ def formatar_nome_no_paragrafo(paragrafo, nome: str):
     antes = texto[:idx]
     depois = texto[idx + len(nome):]
 
+    def criar_run(texto_novo, rPr_base=None):
+        """Cria um w:r limpo com texto, copiando apenas o w:rPr do run base."""
+        r = OxmlElement("w:r")
+        if rPr_base is not None:
+            rPr_orig = rPr_base.find(qn("w:rPr"))
+            if rPr_orig is not None:
+                r.append(deepcopy(rPr_orig))
+        t = OxmlElement("w:t")
+        t.text = texto_novo
+        if texto_novo and (texto_novo[0] == " " or texto_novo[-1] == " "):
+            t.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+        r.append(t)
+        return r
+
     # Run original fica só com o texto antes do nome
     run0.text = antes
 
-    # Novo run: nome em negrito + versalete
-    run_nome_el = deepcopy(run0._r)
-    for t in run_nome_el.findall(qn("w:t")):
-        run_nome_el.remove(t)
-    t_el = OxmlElement("w:t")
-    t_el.text = nome
-    t_el.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
-    run_nome_el.append(t_el)
-
+    # Run do nome: copia só o rPr base e adiciona bold + smallCaps
+    run_nome_el = criar_run(nome, rPr_base=run0._r)
     rPr = run_nome_el.find(qn("w:rPr"))
     if rPr is None:
         rPr = OxmlElement("w:rPr")
@@ -221,15 +228,9 @@ def formatar_nome_no_paragrafo(paragrafo, nome: str):
 
     run0._r.addnext(run_nome_el)
 
-    # Novo run: texto após o nome (formatação normal)
+    # Run do texto depois do nome (formatação normal)
     if depois:
-        run_depois_el = deepcopy(run0._r)
-        for t in run_depois_el.findall(qn("w:t")):
-            run_depois_el.remove(t)
-        t_el2 = OxmlElement("w:t")
-        t_el2.text = depois
-        t_el2.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
-        run_depois_el.append(t_el2)
+        run_depois_el = criar_run(depois, rPr_base=run0._r)
         run_nome_el.addnext(run_depois_el)
 
 
