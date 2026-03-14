@@ -45,13 +45,15 @@ COLUNAS_OBRIGATORIAS = [
 # Colunas usadas na substituição de variáveis
 COLUNAS_PETICAO = [
     "Nome", "QualificacaoAutor", "DataDesligamento", "ValorBeneficio",
-    "RT_Verbas_1", "RT_Verbas_2", "RT_Indenizatoria",
+    "RT_Verbas_1", "Verbas_1", "PeriodoRT_1",
+    "RT_Verbas_2", "Verbas_2", "PeriodoRT_2",
+    "RT_Indenizatoria",
     "PreservacaoSP", "TrechoPrescricao",
 ]
 
 # Colunas informacionais — ignoradas pelo sistema
 COLUNAS_IGNORADAS = [
-    "Verbas_1", "TransitoJulgado_1", "Verbas_2", "TransitoJulgado_2",
+    "TransitoJulgado_1", "TransitoJulgado_2",
     "Grupo", "DataReferenciaSTJ",
 ]
 

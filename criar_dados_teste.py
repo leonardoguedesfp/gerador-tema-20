@@ -66,15 +66,17 @@ def criar_modelo(caminho: str, genero: str, qtd_rts: int):
     if qtd_rts == 2:
         doc.add_paragraph(
             f"{reclamante} ajuizou ações trabalhistas, sob os números "
-            "{RT_Verbas_1} e {RT_Verbas_2}, nas quais foram reconhecidas "
-            "verbas trabalhistas que deveriam ter sido incorporadas ao "
-            "cálculo do benefício."
+            "{RT_Verbas_1} ({Verbas_1}, período de {PeriodoRT_1}) e "
+            "{RT_Verbas_2} ({Verbas_2}, período de {PeriodoRT_2}), nas "
+            "quais foram reconhecidas verbas trabalhistas que deveriam ter "
+            "sido incorporadas ao cálculo do benefício."
         )
     else:
         doc.add_paragraph(
             f"{reclamante} ajuizou ação trabalhista, sob o número "
-            "{RT_Verbas_1}, na qual foram reconhecidas verbas trabalhistas "
-            "que deveriam ter sido incorporadas ao cálculo do benefício."
+            "{RT_Verbas_1} ({Verbas_1}, período de {PeriodoRT_1}), na qual "
+            "foram reconhecidas verbas trabalhistas que deveriam ter sido "
+            "incorporadas ao cálculo do benefício."
         )
     doc.add_paragraph("")
 
@@ -139,8 +141,9 @@ def criar_planilha(caminho: str):
 
     cabecalhos = [
         "Nome", "Genero", "QualificacaoAutor", "DataDesligamento",
-        "ValorBeneficio", "RT_Verbas_1", "Verbas_1", "TransitoJulgado_1",
-        "RT_Verbas_2", "Verbas_2", "TransitoJulgado_2",
+        "ValorBeneficio", "RT_Verbas_1", "Verbas_1", "PeriodoRT_1",
+        "TransitoJulgado_1",
+        "RT_Verbas_2", "Verbas_2", "PeriodoRT_2", "TransitoJulgado_2",
         "RT_Indenizatoria", "PreservacaoSP", "QtdRTs",
         "Grupo", "DataReferenciaSTJ", "TrechoPrescricao",
     ]
@@ -157,9 +160,11 @@ def criar_planilha(caminho: str):
         "R$ 10.233,57",
         "0000263-76.2015.5.10.0010",
         "horas extras",
+        "01/2010 a 12/2014",
         "15/3/2020",
         "0000765-62.2017.5.10.0004",
         "diferenças salariais",
+        "03/2012 a 06/2016",
         "22/8/2021",
         "0000237-50.2021.5.10.0016",
         "em 6/2017, no importe de R$9.729,16",
@@ -182,7 +187,9 @@ def criar_planilha(caminho: str):
         "R$ 8.450,00",
         "0001876-92.2014.5.10.0002",
         "horas extras e gratificação",
+        "05/2008 a 11/2013",
         "10/6/2019",
+        "",
         "",
         "",
         "",
@@ -207,7 +214,9 @@ def criar_planilha(caminho: str):
         "R$ 12.100,00",
         "0002345-11.2016.5.10.0005",
         "adicional noturno",
+        "02/2011 a 09/2015",
         "28/11/2020",
+        "",
         "",
         "",
         "",
