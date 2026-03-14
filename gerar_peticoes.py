@@ -181,6 +181,78 @@ def substituir_variaveis_paragrafo(paragrafo, variaveis: dict) -> list:
     return []
 
 
+def formatar_nome_no_paragrafo(paragrafo, nome: str):
+    """Aplica negrito e versalete ao nome do cliente no parágrafo."""
+    from docx.oxml.ns import qn
+    from docx.oxml import OxmlElement
+    from copy import deepcopy
+
+    if not nome or not paragrafo.runs:
+        return
+
+    run0 = paragrafo.runs[0]
+    texto = run0.text
+
+    if nome not in texto:
+        return
+
+    idx = texto.index(nome)
+    antes = texto[:idx]
+    depois = texto[idx + len(nome):]
+
+    # Run original fica só com o texto antes do nome
+    run0.text = antes
+
+    # Novo run: nome em negrito + versalete
+    run_nome_el = deepcopy(run0._r)
+    for t in run_nome_el.findall(qn("w:t")):
+        run_nome_el.remove(t)
+    t_el = OxmlElement("w:t")
+    t_el.text = nome
+    t_el.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+    run_nome_el.append(t_el)
+
+    rPr = run_nome_el.find(qn("w:rPr"))
+    if rPr is None:
+        rPr = OxmlElement("w:rPr")
+        run_nome_el.insert(0, rPr)
+    rPr.append(OxmlElement("w:b"))
+    rPr.append(OxmlElement("w:smallCaps"))
+
+    run0._r.addnext(run_nome_el)
+
+    # Novo run: texto após o nome (formatação normal)
+    if depois:
+        run_depois_el = deepcopy(run0._r)
+        for t in run_depois_el.findall(qn("w:t")):
+            run_depois_el.remove(t)
+        t_el2 = OxmlElement("w:t")
+        t_el2.text = depois
+        t_el2.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+        run_depois_el.append(t_el2)
+        run_nome_el.addnext(run_depois_el)
+
+
+def aplicar_formatacao_nome_documento(doc, nome: str):
+    """Aplica negrito e versalete ao nome em todo o documento."""
+    for paragrafo in doc.paragraphs:
+        formatar_nome_no_paragrafo(paragrafo, nome)
+    for tabela in doc.tables:
+        for row in tabela.rows:
+            for cell in row.cells:
+                for paragrafo in cell.paragraphs:
+                    formatar_nome_no_paragrafo(paragrafo, nome)
+    for secao in doc.sections:
+        for hf in [secao.header, secao.footer, secao.first_page_header,
+                   secao.first_page_footer, secao.even_page_header, secao.even_page_footer]:
+            if hf:
+                try:
+                    for paragrafo in hf.paragraphs:
+                        formatar_nome_no_paragrafo(paragrafo, nome)
+                except Exception:
+                    pass
+
+
 def encontrar_residuais_paragrafo(paragrafo) -> list:
     """Retorna lista de variáveis {xxx} residuais no parágrafo."""
     texto = "".join(run.text for run in paragrafo.runs)
@@ -471,6 +543,9 @@ def main():
 
             # Substituir
             residuais = substituir_variaveis_documento(doc, variaveis)
+
+            # Formatar nome em negrito e versalete
+            aplicar_formatacao_nome_documento(doc, nome)
 
             # 5g. Verificar variáveis residuais
             observacoes = []
